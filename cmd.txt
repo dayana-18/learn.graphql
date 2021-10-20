@@ -1,7 +1,0 @@
-npm install apollo-server graphql
-
-yarn init -y
-
-yarn add -D @babel/core @babel/cli @babel/node @babel/preset-env nodemon
-
-node main.js
