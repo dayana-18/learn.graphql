@@ -4,4 +4,16 @@ yarn init -y
 
 yarn add -D @babel/core @babel/cli @babel/node @babel/preset-env nodemon
 
+npm install prisma --save-dev
+
+npm install @prisma/client  
+
+npx prisma init
+
+npx prisma format
+
+npx prisma migrate dev
+
+npx prisma generate
+
 node main.js
