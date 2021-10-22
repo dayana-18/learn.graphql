@@ -99,20 +99,6 @@ const typeDefs = gql`
 `;
 //user(firstName: String, lastName: String, email: String, password: String ): User!
 
-//test
-const users = [
-  {
-    id: 1,
-    firstName: 'Kate',
-    lastName: 'Chopin',
-  },
-  {
-    id: 2,
-    firstName: 'Val',
-    lastName: 'MZ',
-  },
-];
-
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 /*const resolvers = {
