@@ -31,6 +31,13 @@ const dateScalar = new GraphQLScalarType({
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
+  # Date pour les posts
+  scalar Date
+
+  type MyType {
+    created: Date
+  }
+
   # User
   type User {
     id: Int!
@@ -38,13 +45,6 @@ const typeDefs = gql`
     lastName: String
     email: String
     password: String
-  }
-
-  # Date pour les posts
-  scalar Date
-
-  type MyType {
-    created: Date
   }
 
   # Post crée par un utilisateur
@@ -56,6 +56,22 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+
+  input userInput {
+    id: Int!
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+  }
+
+  input commentInput {
+    author: userInput
+    comments: commentInput
+    content: String
+    createdAt: Date
+    updatedAt: Date
+  }  
 
   type AuthPayload {
     token: String
@@ -78,7 +94,7 @@ const typeDefs = gql`
     post(authorId: Int!, content: String!, createdAt: Date, updatedAt: Date ): Post!
     updatePost(id: Int!, content: String): Post!
     deletePost(id: Int!): Post!
-    addCommentToPost(id: Int!, comments: Int, updatedAt: Date ): Post!
+    addCommentToPost(id: Int!, input: commentInput ): Post!
   }
 `;
 //user(firstName: String, lastName: String, email: String, password: String ): User!
@@ -127,10 +143,13 @@ const resolvers = {
       });
     },
 
-    //read all the comments from a post ???
+    //read all the comments from a post ??? NOT WORKING
     commentsFromPost: async (parent, args, context) => {
       return context.prisma.post.findMany({
         where: { id: Number(args.id) },
+        select: {
+          comments: true,
+        },
       })
     },
 
@@ -187,12 +206,14 @@ const resolvers = {
       )
     },
 
-    //create comment on a post ??? update le post et ajouter son tableau de posts
+    //update post and add a comment ??? NOT WORKING
     addCommentToPost: (parent, args, context, info) => {
       const addCommentToPost = context.prisma.post.update({
         where: { id: Number(args.id) },
         data: {
-          comments: args.comments,
+          comments: {
+            create: args.comments,
+          },
         },
       })
       return addCommentToPost
